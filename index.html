@@ -15,21 +15,21 @@
     <div aria-label="Imagen central seleccionada" class="center-image-container" id="centerContainer">
       <div aria-atomic="true" aria-live="polite" class="center-image" id="centerImage" role="img">
         <img alt="Imagen central del carrusel, cuadrado con fondo gris claro y texto 'Imagen Central'" height="150" id="centerImg" loading="lazy" src="img/central.jpg" width="150"/>
-        <div aria-hidden="true" class="image-number" id="centerNumber">Central</div>
+        <div aria-hidden="true" class="image-number" id="centerNumber" style="display: none;">Central</div>
       </div>
     </div>
 
     <div aria-label="Carrusel 3D de imágenes" class="carousel" id="carousel" role="list"></div>
     <div aria-hidden="true" class="swap-container" id="swapContainer"></div>
 
-    <div class="controls" style="position: fixed; bottom: 90px; left: 50%; transform: translateX(-50%); z-index: 1000;">
-      <button aria-controls="settingsMenu" aria-expanded="false" aria-haspopup="true" aria-label="Abrir configuración" id="settingsBtn">
+    <div class="controls" style="position: fixed; bottom: 90px; left: 50%; transform: translateX(-50%); z-index: 1000; display: none;">
+      <button aria-controls="settingsMenu" aria-expanded="false" aria-haspopup="true" aria-label="Abrir configuración" id="settingsBtn" style="display: none;">
         <i class="fas fa-cog"></i> Configurações
       </button>
     </div>
 
-    <div aria-hidden="true" aria-label="Menú de configuración" class="settings-menu" id="settingsMenu" role="region">
-      <div class="controls" style="position: static; display: flex; flex-direction: row; justify-content: center; flex-wrap: wrap; gap: 10px;">
+    <div aria-hidden="true" aria-label="Menú de configuración" class="settings-menu" id="settingsMenu" role="region" style="display: none;">
+      <div class="controls" style="position: static; display: flex; flex-direction: row; justify-content: center; flex-wrap: wrap; gap: 10px; display: none;">
         <button aria-label="Pausar rotación del carrusel" id="pauseBtn">Pausar</button>
         <button aria-label="Continuar rotación del carrusel" id="resumeBtn">Continuar</button>
         <button aria-label="Invertir dirección de rotación" id="reverseBtn">Invertir</button>

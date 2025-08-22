@@ -98,6 +98,7 @@ html, body {
   font-size: 12px;
   font-weight: bold;
   user-select: none;
+  display: none;
 }
 
 /* Glow no chão */
@@ -203,6 +204,7 @@ html, body {
   z-index: 1000;
   text-align: center;
   top: 100px;
+  display: none;
 }
 
 .selection-message {
