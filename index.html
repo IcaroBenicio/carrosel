@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Carrusel 3D con Selección de Imágenes</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+  <div class="scene">
+    <div class="glow"></div>
+
+    <div aria-label="Imagen central seleccionada" class="center-image-container" id="centerContainer">
+      <div aria-atomic="true" aria-live="polite" class="center-image" id="centerImage" role="img">
+        <img alt="Imagen central del carrusel, cuadrado con fondo gris claro y texto 'Imagen Central'" height="150" id="centerImg" loading="lazy" src="img/central.jpg" width="150"/>
+        <div aria-hidden="true" class="image-number" id="centerNumber">Central</div>
+      </div>
+    </div>
+
+    <div aria-label="Carrusel 3D de imágenes" class="carousel" id="carousel" role="list"></div>
+    <div aria-hidden="true" class="swap-container" id="swapContainer"></div>
+
+    <div class="controls" style="position: fixed; bottom: 90px; left: 50%; transform: translateX(-50%); z-index: 1000;">
+      <button aria-controls="settingsMenu" aria-expanded="false" aria-haspopup="true" aria-label="Abrir configuración" id="settingsBtn">
+        <i class="fas fa-cog"></i> Configurações
+      </button>
+    </div>
+
+    <div aria-hidden="true" aria-label="Menú de configuración" class="settings-menu" id="settingsMenu" role="region">
+      <div class="controls" style="position: static; display: flex; flex-direction: row; justify-content: center; flex-wrap: wrap; gap: 10px;">
+        <button aria-label="Pausar rotación del carrusel" id="pauseBtn">Pausar</button>
+        <button aria-label="Continuar rotación del carrusel" id="resumeBtn">Continuar</button>
+        <button aria-label="Invertir dirección de rotación" id="reverseBtn">Invertir</button>
+        <button aria-label="Activar o desactivar intercambio automático" aria-pressed="true" id="swapBtn">Intercambio ON</button>
+      </div>
+    </div>
+
+    <div aria-atomic="true" aria-live="polite" class="status-indicator" id="statusIndicator">Estado: Girando</div>
+    <div aria-atomic="true" aria-live="polite" class="selection-message" id="selectionMessage">Imagen seleccionada</div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
