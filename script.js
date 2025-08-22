@@ -1,3 +1,4 @@
+// Seleção de elementos
 const carousel = document.getElementById("carousel");
 const pauseBtn = document.getElementById("pauseBtn");
 const resumeBtn = document.getElementById("resumeBtn");
@@ -14,18 +15,8 @@ const settingsBtn = document.getElementById("settingsBtn");
 const settingsMenu = document.getElementById("settingsMenu");
 
 // URLs das imagens do carrusel
-const imagePaths = [
-  "img/1.jpg",
-  "img/2.jpg",
-  "img/3.jpg",
-  "img/4.jpg",
-  "img/5.jpg",
-  "img/6.jpg",
-  "img/7.jpg",
-  "img/8.jpg",
-  "img/9.jpg",
-  "img/10.jpg"
-];
+const imagePaths = ["img/1.jpg","img/2.jpg","img/3.jpg","img/4.jpg","img/5.jpg",
+                    "img/6.jpg","img/7.jpg","img/8.jpg","img/9.jpg","img/10.jpg"];
 
 const items = [];
 const images = [];
@@ -34,7 +25,6 @@ const numbers = [];
 let currentlySwapping = false;
 let enableSwapping = true;
 let selectedIndex = null;
-
 const radius = 200;
 const angleStep = (2 * Math.PI) / imagePaths.length;
 
@@ -62,20 +52,14 @@ for (let i = 0; i < imagePaths.length; i++) {
   item.appendChild(number);
   carousel.appendChild(item);
 
-  item.addEventListener("click", () => {
-    if (!currentlySwapping) selectCarouselItem(i);
-  });
-
+  item.addEventListener("click", () => { if (!currentlySwapping) selectCarouselItem(i); });
   item.addEventListener("keydown", (e) => {
     if ((e.key === "Enter" || e.key === " ") && !currentlySwapping) {
-      e.preventDefault();
-      selectCarouselItem(i);
+      e.preventDefault(); selectCarouselItem(i);
     }
   });
 
-  items.push(item);
-  images.push(img);
-  numbers.push(number);
+  items.push(item); images.push(img); numbers.push(number);
 }
 
 // Posicionar elementos do carrusel
@@ -87,13 +71,11 @@ function updateCarouselPositions() {
     item.style.transform = `translateX(${x}px) translateZ(${z}px) rotateY(${(angle*180)/Math.PI}deg)`;
   });
 }
-
 updateCarouselPositions();
 
 let isAnimating = true;
 let direction = 1;
 let rotationDegree = 0;
-let animationFrameId = null;
 let swapTimeout = null;
 
 // Animação contínua
@@ -102,10 +84,10 @@ function animate() {
     rotationDegree += 0.5 * direction;
     carousel.style.transform = `rotateY(${rotationDegree}deg)`;
   }
-  animationFrameId = requestAnimationFrame(animate);
+  requestAnimationFrame(animate);
 }
 
-// Selecionar item do carrusel
+// Selecionar item
 function selectCarouselItem(index) {
   selectedIndex = index;
   selectionMessage.textContent = `Seleccionada: Imagen ${index+1}`;
@@ -116,7 +98,7 @@ function selectCarouselItem(index) {
   alignToSelectedItem(index);
 }
 
-// Alinhar item selecionado ao centro
+// Alinhar item central
 function alignToSelectedItem(index) {
   currentlySwapping = true;
   statusIndicator.textContent = "Estado: Alineando";
@@ -142,16 +124,43 @@ function alignToSelectedItem(index) {
   requestAnimationFrame(alignAnimation);
 }
 
-// Troca de imagens
+// Rect relativo ao container
+function getRectRelativeToContainer(rect) {
+  const containerRect = swapContainer.getBoundingClientRect();
+  return { width: rect.width, height: rect.height, left: rect.left - containerRect.left, top: rect.top - containerRect.top };
+}
+
+// Swap items
+function createSwapItem(rect, imgSrc, numberText) {
+  const div = document.createElement("div");
+  div.className = "swap-item";
+  div.style.width = `${rect.width}px`;
+  div.style.height = `${rect.height}px`;
+  div.style.position = "absolute";
+  div.style.top = `0px`;
+  div.style.left = `0px`;
+  div.style.transform = `translate(${rect.left}px, ${rect.top}px)`;
+
+  const img = document.createElement("img"); img.src = imgSrc; div.appendChild(img);
+  const num = document.createElement("div"); num.className = "swap-number"; num.textContent = numberText; div.appendChild(num);
+  return div;
+}
+
+function moveSwapItem(item, rect) {
+  item.style.width = `${rect.width}px`;
+  item.style.height = `${rect.height}px`;
+  item.style.transform = `translate(${rect.left}px, ${rect.top}px)`;
+}
+
+// Troca suave
 function performSmoothExchange(index) {
   swapContainer.innerHTML = "";
   statusIndicator.textContent = "Estado: Intercambiando";
 
   const selectedItem = items[index];
-  const selectedRect = selectedItem.getBoundingClientRect();
-  const centerRect = centerImage.getBoundingClientRect();
+  const selectedRect = getRectRelativeToContainer(selectedItem.getBoundingClientRect());
+  const centerRect = getRectRelativeToContainer(centerImage.getBoundingClientRect());
 
-  // Criar animações
   const fromCarouselToCenter = createSwapItem(selectedRect, images[index].src, numbers[index].textContent);
   const fromCenterToCarousel = createSwapItem(centerRect, centerImg.src, centerNumber.textContent);
 
@@ -169,10 +178,8 @@ function performSmoothExchange(index) {
   setTimeout(() => {
     const tempSrc = centerImg.src;
     const tempNumber = centerNumber.textContent;
-
     centerImg.src = images[index].src;
     centerNumber.textContent = numbers[index].textContent;
-
     images[index].src = tempSrc;
     numbers[index].textContent = tempNumber;
 
@@ -189,36 +196,6 @@ function performSmoothExchange(index) {
   }, 1050);
 }
 
-// Criar elemento de swap
-function createSwapItem(rect, imgSrc, numberText) {
-  const div = document.createElement("div");
-  div.className = "swap-item";
-  div.style.width = `${rect.width}px`;
-  div.style.height = `${rect.height}px`;
-  div.style.top = `${rect.top}px`;
-  div.style.left = `${rect.left}px`;
-  div.style.position = "fixed";
-
-  const img = document.createElement("img");
-  img.src = imgSrc;
-  div.appendChild(img);
-
-  const num = document.createElement("div");
-  num.className = "swap-number";
-  num.textContent = numberText;
-  div.appendChild(num);
-
-  return div;
-}
-
-// Mover swap item
-function moveSwapItem(item, rect) {
-  item.style.width = `${rect.width}px`;
-  item.style.height = `${rect.height}px`;
-  item.style.top = `${rect.top}px`;
-  item.style.left = `${rect.left}px`;
-}
-
 // Troca automática
 function swapImages() {
   if(!enableSwapping || currentlySwapping) return;
@@ -232,7 +209,7 @@ function swapImages() {
   alignToSelectedItem(frontIndex);
 }
 
-// Iniciar troca automática
+// Start swapping
 function startSwapping() {
   if(swapTimeout) clearTimeout(swapTimeout);
   swapTimeout = setTimeout(swapImages, 5000);
@@ -246,8 +223,7 @@ swapBtn.addEventListener("click", () => {
   enableSwapping = !enableSwapping;
   swapBtn.setAttribute("aria-pressed", enableSwapping.toString());
   swapBtn.textContent = enableSwapping ? "Intercambio ON" : "Intercambio OFF";
-  if(enableSwapping) startSwapping();
-  else if(swapTimeout) clearTimeout(swapTimeout);
+  if(enableSwapping) startSwapping(); else if(swapTimeout) clearTimeout(swapTimeout);
 });
 
 // Botão de configuração
@@ -257,6 +233,8 @@ settingsBtn.addEventListener("click", () => {
   settingsMenu.setAttribute("aria-hidden", (!isShown).toString());
 });
 
-// Iniciar animação
+// Start animation
 animate();
 if(enableSwapping) startSwapping();
+
+
